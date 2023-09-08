@@ -70,6 +70,28 @@ const Mutation = new GraphQLObjectType({
         return deletedUser;
       },
     },
+    updateUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLInt },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        const user = userData.find((user) => user.id === args.id);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        if (args.firstName) user.firstName = args.firstName;
+        if (args.lastName) user.lastName = args.lastName;
+        if (args.email) user.email = args.email;
+        if (args.password) user.password = args.password;
+
+        return user;
+      },
+    },
   },
 });
 
