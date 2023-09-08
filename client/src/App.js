@@ -7,13 +7,13 @@ import {
   from,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import GetUsers from "./Components/GetUsers";
 import Form from "./Components/Form";
+import GetUsers from "./Components/GetUsers";
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
     graphqlErrors.map(({ message, location, path }) => {
-      alert(`Graphql error ${message}`);
+      alert(`Graphql error: ${message}`);
     });
   }
 });
@@ -32,6 +32,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Form />
+      <GetUsers />
     </ApolloProvider>
   );
 }

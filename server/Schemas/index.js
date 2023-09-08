@@ -7,8 +7,21 @@ const {
   GraphQLList,
 } = graphql;
 const userData = require("../MOCK_DATA.json");
-
 const UserType = require("./TypeDefs/UserType");
+
+const getId = () => {
+  let isUnique = false;
+  let randomId;
+
+  while (!isUnique) {
+    randomId = Math.floor(Math.random() * 1000000) + 1;
+    const exists = userData.some((user) => user.id === randomId);
+
+    if (!exists) isUnique = true;
+  }
+
+  return randomId;
+};
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -36,13 +49,25 @@ const Mutation = new GraphQLObjectType({
       },
       resolve(parent, args) {
         userData.push({
-          id: userData.length + 1,
+          id: getId(),
           firstName: args.firstName,
           lastName: args.lastName,
           email: args.email,
           password: args.password,
         });
         return args;
+      },
+    },
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLInt },
+      },
+      resolve(parent, args) {
+        const userIndex = userData.findIndex((user) => user.id === args.id);
+        if (userIndex === -1) throw new Error("User not found");
+        const [deletedUser] = userData.splice(userIndex, 1);
+        return deletedUser;
       },
     },
   },

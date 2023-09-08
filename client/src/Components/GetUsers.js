@@ -5,6 +5,7 @@ import { LOAD_USERS } from "../GraphQL/Queries";
 function GetUsers() {
   const { error, loading, data } = useQuery(LOAD_USERS);
   const [users, setUsers] = useState([]);
+
   useEffect(() => {
     if (data) {
       setUsers(data.getAllUsers);
@@ -13,10 +14,9 @@ function GetUsers() {
 
   return (
     <div>
-      {/* {" "}
       {users.map((val) => {
         return <h1> {val.firstName}</h1>;
-      })} */}
+      })}
     </div>
   );
 }
